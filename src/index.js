@@ -1,13 +1,12 @@
-// точка входа библиотеки
-import parse from './parsers.js'
+import buildDiff from './buildDiff.js';
+import format from './format.js';
+import parse from './parse.js';
 
-export const gendiff = (filepath1, filepath2) => {
-    const file1 = parse(filepath1)
-    const file2 = parse(filepath2)
-    return {
-        file1: file1,
-        file2: file2
-    };
+const genDiff = (filepath1, filepath2) => {
+    const data1 = parse(filepath1);
+    const data2 = parse(filepath2);
+    const diff = buildDiff(data1, data2);
+    return format(diff);
 };
 
-export default gendiff
+export default genDiff;
