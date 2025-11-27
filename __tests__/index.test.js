@@ -6,43 +6,90 @@ import parse from '../src/parse.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename, subfolder = '') => {
+  const basePath = join(__dirname, '..', '__fixtures__');
+  return subfolder ? join(basePath, subfolder, filename) : join(basePath, filename);
+};
 
-describe('parse', () => {
-  test('should parse valid JSON file', () => {
-    const validJsonPath = getFixturePath('valid.json');
-    const result = parse(validJsonPath);
-    expect(result).toEqual({ key: 'value' });
-  });
-
-  test('should throw error for non-existent file', () => {
-    const nonExistentPath = getFixturePath('nonexistent.json');
-    expect(() => parse(nonExistentPath)).toThrow();
-  });
-
-  test('should throw SyntaxError for invalid JSON', () => {
-    const invalidJsonPath = getFixturePath('invalid.json');
-    expect(() => parse(invalidJsonPath)).toThrow();
-  });
-
-  test('should handle relative paths', () => {
-    const relativePath = './__fixtures__/valid.json';
-    const result = parse(relativePath);
-    expect(result).toEqual({ key: 'value' });
-  });
-});
-
-describe('genDiff', () => {
-  test('test genDiff function', () => {
-    const file1 = getFixturePath('file1.json');
-    const file2 = getFixturePath('file2.json');
-    expect(genDiff(file1, file2)).toEqual(`{
+const EXPECTED_DIFF = `{
   - follow: false
     host: hexlet.io
   - proxy: 123.234.53.22
   - timeout: 50
   + timeout: 20
   + verbose: true
-}`);
+}`;
+
+describe('parse', () => {
+  describe('valid files', () => {
+    test('JSON', () => {
+      const path = getFixturePath('valid.json', 'parse');
+      const result = parse(path);
+      expect(result).toEqual({ key: 'value' });
+    });
+
+    test('YAML', () => {
+      const path = getFixturePath('valid.yaml', 'parse');
+      const result = parse(path);
+      expect(result).toEqual({ key: 'value' });
+    });
+
+    test('relative paths', () => {
+      const path = './__fixtures__/parse/valid.json';
+      const result = parse(path);
+      expect(result).toEqual({ key: 'value' });
+    });
+  });
+
+  describe('error handling', () => {
+    test('invalid JSON', () => {
+      const path = getFixturePath('invalid.json', 'parse');
+      expect(() => parse(path)).toThrow();
+    });
+
+    test('invalid YAML', () => {
+      const path = getFixturePath('invalid.yaml', 'parse');
+      expect(() => parse(path)).toThrow();
+    });
+
+    test('unsupported format', () => {
+      const path = getFixturePath('file.txt', 'parse');
+      expect(() => parse(path)).toThrow();
+    });
+
+    test('non-existent file', () => {
+      const path = getFixturePath('nonexistent.json', 'parse');
+      expect(() => parse(path)).toThrow();
+    });
+  });
+});
+
+describe('genDiff', () => {
+  describe('same format', () => {
+    test('JSON + JSON', () => {
+      const file1 = getFixturePath('file1.json', 'genDiff');
+      const file2 = getFixturePath('file2.json', 'genDiff');
+      expect(genDiff(file1, file2)).toEqual(EXPECTED_DIFF);
+    });
+
+    test('YAML + YAML', () => {
+      const file1 = getFixturePath('file1.yml', 'genDiff');
+      const file2 = getFixturePath('file2.yaml', 'genDiff');
+      expect(genDiff(file1, file2)).toEqual(EXPECTED_DIFF);
+    });
+  });
+
+  describe('mixed formats', () => {
+    test('JSON + YAML', () => {
+      const file1 = getFixturePath('file1.json', 'genDiff');
+      const file2 = getFixturePath('file2.yaml', 'genDiff');
+      expect(genDiff(file1, file2)).toEqual(EXPECTED_DIFF);
+    });
+
+    test('YAML + JSON', () => {
+      const file1 = getFixturePath('file1.yml', 'genDiff');
+      const file2 = getFixturePath('file2.json', 'genDiff');
+      expect(genDiff(file1, file2)).toEqual(EXPECTED_DIFF);
+    });
   });
 });
