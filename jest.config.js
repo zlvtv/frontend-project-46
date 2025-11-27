@@ -6,11 +6,12 @@ export default {
   // Генерация покрытия кода
   collectCoverage: false,
   coverageDirectory: 'coverage', // папка для отчётов
-  coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  coverageReporters: ['text', 'lcov', 'html'],
 
   // Какие файлы включать в покрытие
   collectCoverageFrom: [
     'src/**/*.js',
+    '!src/index.js', 
   ],
   transform: {},
 };
