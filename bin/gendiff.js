@@ -16,7 +16,7 @@ program
   .action((filepath1, filepath2) => {
     try {
       const result = genDiff(filepath1, filepath2);
-      console.log(result);
+      console.log(stylish(result));
     } catch (error) {
       console.error('Error:', error.message);
       process.exit(1);
