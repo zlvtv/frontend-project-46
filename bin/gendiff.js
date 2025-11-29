@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import process from 'process';
 import genDiff from '../src/index.js'; 
+import stylish from '../src/format.js';
 
 const program = new Command();
 

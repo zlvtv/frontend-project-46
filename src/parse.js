@@ -20,7 +20,6 @@ export const parse = (filepath) => {
     const parser = parsers[ext];
 
     const content = fs.readFileSync(absolutePath, 'utf8');
-
     return parser(content);
 
   } catch (error) {
