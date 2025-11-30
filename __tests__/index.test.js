@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import genDiff from '../src/index.js';
 import stylish from '../src/format.js';
 import parse from '../src/parse.js';
-import expectedDiff from '../__fixtures__/genDiff/expectedDiff.js'
+import expectedDiff from '../__fixtures__/genDiff/expectedDiff.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

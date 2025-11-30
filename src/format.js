@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash';
 
 export const formatObject = (data, depth = 1) => {
   const indent = ' '.repeat(4);
@@ -12,7 +12,7 @@ export const formatObject = (data, depth = 1) => {
 
 export const formatValue = (data, depth = 1) => {
   if(_.isObject(data)) {
-    return formatObject(data, depth + 1)
+    return formatObject(data, depth + 1);
   }
   return data;
 };
