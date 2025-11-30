@@ -10,25 +10,17 @@ export const buildDiff = (obj1, obj2) => {
     const hasInObj1 = _.has(obj1, key);
     const hasInObj2 = _.has(obj2, key);
     if (hasInObj1 && hasInObj2) {
-      if (_.isObject(obj1[key]) ||  _.isObject(obj2[key])) {
-        const innerDiff = buildDiff((_.isObject(obj1[key]) ? obj1[key] : {}), (_.isObject(obj2[key]) ? obj2[key] : {}));
+      if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
+        const innerDiff = buildDiff(obj1[key], obj2[key]);
         result.push([' ', key, innerDiff]);
       }
-      else (obj1[key] === obj2[key] && typeof(obj1[key]) === typeof(obj2[key])) ? result.push([' ', key, obj1[key]]) : result.push(['-', key, obj1[key]], ['+', key, obj2[key]]);
+      else obj1[key] === obj2[key] ? result.push([' ', key, obj1[key]]) : result.push(['-', key, obj1[key]], ['+', key, obj2[key]]);
     }
     else if (!hasInObj1) {
-      if (_.isObject(obj2[key])) {
-        const innerDiff = buildDiff(obj2[key], obj2[key]);
-        result.push(['+', key, innerDiff]);
-      }
-      else result.push(['+', key, obj2[key]]);
+      result.push(['+', key, obj2[key]]);
     }
-    else if (!hasInObj2) {
-      if (_.isObject(obj1[key])) {
-        const innerDiff = buildDiff(obj1[key], obj1[key]);
-        result.push(['-', key, innerDiff]);
-      }
-      else result.push(['-', key, obj1[key]]);
+    else {
+      result.push(['-', key, obj1[key]]);
     }
   });
   return sortDiff(result);

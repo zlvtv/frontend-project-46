@@ -1,4 +1,5 @@
-const EXPECTED_DIFF = `{
+const EXPECTED_DIFF = 
+`{
     common: {
       + follow: false
         setting1: Value 1
@@ -11,7 +12,7 @@ const EXPECTED_DIFF = `{
         }
         setting6: {
             doge: {
-              - wow:
+              - wow: 
               + wow: so much
             }
             key: value

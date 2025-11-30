@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import genDiff from '../src/index.js';
+import stylish from '../src/format.js';
 import parse from '../src/parse.js';
 import expectedDiff from '../__fixtures__/genDiff/expectedDiff.js'
 
@@ -61,13 +62,13 @@ describe('genDiff', () => {
     test('JSON + JSON', () => {
       const file1 = getFixturePath('file1.json', 'genDiff');
       const file2 = getFixturePath('file2.json', 'genDiff');
-      expect(genDiff(file1, file2)).toEqual(expectedDiff);
+      expect(stylish(genDiff(file1, file2))).toEqual(expectedDiff);
     });
 
     test('YAML + YAML', () => {
       const file1 = getFixturePath('file1.yml', 'genDiff');
       const file2 = getFixturePath('file2.yaml', 'genDiff');
-      expect(genDiff(file1, file2)).toEqual(expectedDiff);
+      expect(stylish(genDiff(file1, file2))).toEqual(expectedDiff);
     });
   });
 
@@ -75,13 +76,13 @@ describe('genDiff', () => {
     test('JSON + YAML', () => {
       const file1 = getFixturePath('file1.json', 'genDiff');
       const file2 = getFixturePath('file2.yaml', 'genDiff');
-      expect(genDiff(file1, file2)).toEqual(expectedDiff);
+      expect(stylish(genDiff(file1, file2))).toEqual(expectedDiff);
     });
 
     test('YAML + JSON', () => {
       const file1 = getFixturePath('file1.yml', 'genDiff');
       const file2 = getFixturePath('file2.json', 'genDiff');
-      expect(genDiff(file1, file2)).toEqual(expectedDiff);
+      expect(stylish(genDiff(file1, file2))).toEqual(expectedDiff);
     });
   });
 });
