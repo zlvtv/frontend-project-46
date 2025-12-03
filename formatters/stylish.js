@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export const formatObject = (data, depth = 1) => {
+const formatObject = (data, depth = 1) => {
   const indent = ' '.repeat(4);
   const currentIndent = indent.repeat(depth);
   const closingIndent = indent.repeat(depth - 1);
@@ -10,7 +10,7 @@ export const formatObject = (data, depth = 1) => {
   return `{\n${lines.join('\n')}\n${closingIndent}}`;
 };
 
-export const formatValue = (data, depth = 1) => {
+const formatValue = (data, depth = 1) => {
   if(_.isObject(data)) {
     return formatObject(data, depth + 1);
   }
