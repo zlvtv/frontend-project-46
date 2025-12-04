@@ -32,18 +32,18 @@ describe('stylish format', () => {
     });
   });
   test('formatObject formats plain objects', () => {
-  const diff = [[' ', 'obj', { key: 'value', nested: { inner: 'test' } }]];
-  const result = stylish(diff);
+    const diff = [[' ', 'obj', { key: 'value', nested: { inner: 'test' } }]];
+    const result = stylish(diff);
   
-  expect(result).toContain('key: value');
-  expect(result).toContain('nested: {');
-  expect(result).toContain('inner: test');
-});
+    expect(result).toContain('key: value');
+    expect(result).toContain('nested: {');
+    expect(result).toContain('inner: test');
+  });
 
-test('formatObject handles empty objects', () => {
-  const diff = [[' ', 'empty', {}]];
-  const result = stylish(diff);
+  test('formatObject handles empty objects', () => {
+    const diff = [[' ', 'empty', {}]];
+    const result = stylish(diff);
   
-  expect(result).toContain('empty: {');
+    expect(result).toContain('empty: {');
   });
 });
