@@ -15,8 +15,8 @@ export const buildDiff = (obj1, obj2) => {
         result.push([' ', key, innerDiff]);
       }
       else obj1[key] === obj2[key] 
-      ? result.push([' ', key, obj1[key]]) 
-      : result.push(['-', key, obj1[key]], ['+', key, obj2[key]]);
+        ? result.push([' ', key, obj1[key]]) 
+        : result.push(['-', key, obj1[key]], ['+', key, obj2[key]]);
     }
     else if (!hasInObj1) {
       result.push(['+', key, obj2[key]]);
