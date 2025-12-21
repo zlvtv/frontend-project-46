@@ -19,6 +19,11 @@ test('getFormatter returns plain for "plain"', () => {
   expect(typeof formatter).toBe('function'); 
 });
 
+test('getFormatter returns json for "json"', () => {
+  const formatter = getFormatter('json');
+  expect(typeof formatter).toBe('function'); 
+});
+
 test('getFormatter throws for unknown format', () => {
   expect(() => getFormatter('unknown')).toThrow('Unknown format');
 });

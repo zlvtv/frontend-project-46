@@ -31,19 +31,4 @@ describe('json format', () => {
       expect(genDiff(file1, file2, 'json')).toEqual(EXPECTED_DIFF_JSON);
     });
   });
-  test('formatObject formats plain objects', () => {
-    const diff = [[' ', 'obj', { key: 'value', nested: { inner: 'test' } }]];
-    const result = stylish(diff);
-  
-    expect(result).toContain('key: value');
-    expect(result).toContain('nested: {');
-    expect(result).toContain('inner: test');
-  });
-
-  test('formatObject handles empty objects', () => {
-    const diff = [[' ', 'empty', {}]];
-    const result = json(diff);
-  
-    expect(result).toContain('empty: {');
-  });
 });

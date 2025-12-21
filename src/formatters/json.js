@@ -1,33 +1,52 @@
 import _ from 'lodash';
 
-const formatObject = (data, depth = 1) => {
-  const indent = ' '.repeat(4);
-  const currentIndent = indent.repeat(depth);
-  const closingIndent = indent.repeat(depth - 1);
-  const lines = Object.entries(data).map(([key, value]) => {
-    return `${currentIndent}${key}: ${formatValue(value, depth)}`;
-  });
-  return `{\n${lines.join('\n')}\n${closingIndent}}`;
+const getPrevValue = (data, key, sign) => {
+  const otherSign = sign === '+' ? '-' : '+';
+  const found = data.find(([s, k]) => k === key && s === otherSign);
+  return found ? found[2] : undefined;
 };
 
-const formatValue = (data, depth = 1) => {
-  if(_.isObject(data)) {
-    return formatObject(data, depth + 1);
-  }
-  return data;
+const makeObject = (data, depth = 1) => {
+  let formattedValue = '';
+  let result = {};
+  for (const [sign, key, value] of data) {
+    result[key] = {};
+    let prevValue =  getPrevValue(data, key, sign);
+
+    if (_.isArray(value)) {
+      result[key]['type'] = 'nested';
+      formattedValue = makeObject(value, depth + 1);
+      result[key]['children'] = formattedValue;
+    } else {
+      switch (sign) {
+      case '+':
+        result[key]['type'] = (prevValue !== undefined) ? 'updated' : 'added';
+        break;
+      case '-':
+        if (prevValue === undefined) {
+          result[key]['type'] = 'removed';
+        }
+        break;
+      case ' ':
+        result[key]['type'] = 'unchanged';
+        break;
+      default:
+        throw new Error(`Invalid sign: ${sign}`);
+      }
+
+      if (result[key]['type'] === 'updated') {
+        result[key]['prevValue'] = prevValue;
+        result[key]['newValue'] = value;
+      } else {
+        result[key]['value'] = value;
+      }
+    }
+  };
+  return result;
 };
 
-export const json = (data, depth = 1) => {
-  const indent = ' '.repeat(2);
-  const currentIndent = indent.repeat(depth);
-  const closingIndent = indent.repeat(depth - 1);
-  const lines = data.map(([sign, key, value]) => {
-    const formattedValue = _.isArray(value) 
-      ? json(value, depth + 1)
-      : formatValue(value, depth);
-    return `${currentIndent}${sign} ${key}: ${formattedValue}`;
-  }); 
-  return `{\n${lines.join('\n')}\n${closingIndent}}`;
+export const json = (data) => {
+  return JSON.stringify(makeObject(data, 1), null, 2);
 };
 
 export default json;
