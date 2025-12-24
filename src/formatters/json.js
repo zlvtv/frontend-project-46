@@ -21,35 +21,35 @@ const formatDiff = (diff) => {
       const value = added[2];
       result[key] = _.isArray(value) && isDiffArray(value)
         ? {
-            type: 'nested',
-            children: formatDiff(value)
-          }
+          type: 'nested',
+          children: formatDiff(value)
+        }
         : {
-            type: 'added',
-            value: value
-          };
+          type: 'added',
+          value: value
+        };
     } else if (removed) {
       const value = removed[2];
       result[key] = _.isArray(value) && isDiffArray(value)
         ? {
-            type: 'nested',
-            children: formatDiff(value)
-          }
+          type: 'nested',
+          children: formatDiff(value)
+        }
         : {
-            type: 'removed',
-            value: value
-          };
+          type: 'removed',
+          value: value
+        };
     } else if (unchanged) {
       const value = unchanged[2];
       result[key] = _.isArray(value) && isDiffArray(value)
         ? {
-            type: 'nested',
-            children: formatDiff(value)
-          }
+          type: 'nested',
+          children: formatDiff(value)
+        }
         : {
-            type: 'unchanged',
-            value: value
-          };
+          type: 'unchanged',
+          value: value
+        };
     }
   });
 
