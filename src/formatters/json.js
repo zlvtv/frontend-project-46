@@ -14,7 +14,7 @@ const formatDiff = (diff) => {
     if (added && removed) {
       result[key] = {
         type: 'updated',
-        oldValue: removed[2],
+        prevValue: removed[2],
         newValue: added[2]
       };
     } else if (added) {
