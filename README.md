@@ -4,7 +4,9 @@
 [![genDiff](https://github.com/zlvtv/frontend-project-46/actions/workflows/genDiff.yml/badge.svg)](https://github.com/zlvtv/frontend-project-46/actions/workflows/genDiff.yml)
 
 ## Demonstration
-### JSON format
+### stylish format
 [![asciicast](https://asciinema.org/a/MGw46Nz4nNCgyxJJ2DMvvVVLm.svg)](https://asciinema.org/a/MGw46Nz4nNCgyxJJ2DMvvVVLm)
-### YAML format
+### plain format
+[![asciicast](https://asciinema.org/a/TkmrVKIwdd80DNpRNWxLzhFPl.svg)](https://asciinema.org/a/TkmrVKIwdd80DNpRNWxLzhFPl)
+### json format
 [![asciicast](https://asciinema.org/a/TkmrVKIwdd80DNpRNWxLzhFPl.svg)](https://asciinema.org/a/TkmrVKIwdd80DNpRNWxLzhFPl)

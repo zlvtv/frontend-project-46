@@ -1,52 +1,67 @@
 import _ from 'lodash';
 
-const getPrevValue = (data, key, sign) => {
-  const otherSign = sign === '+' ? '-' : '+';
-  const found = data.find(([s, k]) => k === key && s === otherSign);
-  return found ? found[2] : undefined;
-};
+const formatDiff = (diff) => {
+  const result = {};
+  const keys = [...new Set(diff.map(([_, key]) => key))];
 
-const makeObject = (data, depth = 1) => {
-  let formattedValue = '';
-  let result = {};
-  for (const [sign, key, value] of data) {
-    result[key] = {};
-    let prevValue =  getPrevValue(data, key, sign);
+  keys.forEach((key) => {
+    const items = diff.filter(([_, k]) => k === key);
 
-    if (_.isArray(value)) {
-      result[key]['type'] = 'nested';
-      formattedValue = makeObject(value, depth + 1);
-      result[key]['children'] = formattedValue;
-    } else {
-      switch (sign) {
-      case '+':
-        result[key]['type'] = (prevValue !== undefined) ? 'updated' : 'added';
-        break;
-      case '-':
-        if (prevValue === undefined) {
-          result[key]['type'] = 'removed';
-        }
-        break;
-      case ' ':
-        result[key]['type'] = 'unchanged';
-        break;
-      default:
-        throw new Error(`Invalid sign: ${sign}`);
-      }
+    const added = items.find(([sign]) => sign === '+');
+    const removed = items.find(([sign]) => sign === '-');
+    const unchanged = items.find(([sign]) => sign === ' ');
 
-      if (result[key]['type'] === 'updated') {
-        result[key]['prevValue'] = prevValue;
-        result[key]['newValue'] = value;
-      } else {
-        result[key]['value'] = value;
-      }
+    if (added && removed) {
+      result[key] = {
+        type: 'updated',
+        oldValue: removed[2],
+        newValue: added[2]
+      };
+    } else if (added) {
+      const value = added[2];
+      result[key] = _.isArray(value) && isDiffArray(value)
+        ? {
+            type: 'nested',
+            children: formatDiff(value)
+          }
+        : {
+            type: 'added',
+            value: value
+          };
+    } else if (removed) {
+      const value = removed[2];
+      result[key] = _.isArray(value) && isDiffArray(value)
+        ? {
+            type: 'nested',
+            children: formatDiff(value)
+          }
+        : {
+            type: 'removed',
+            value: value
+          };
+    } else if (unchanged) {
+      const value = unchanged[2];
+      result[key] = _.isArray(value) && isDiffArray(value)
+        ? {
+            type: 'nested',
+            children: formatDiff(value)
+          }
+        : {
+            type: 'unchanged',
+            value: value
+          };
     }
-  };
+  });
+
   return result;
 };
 
+const isDiffArray = (arr) => {
+  return Array.isArray(arr) && arr.every(item => Array.isArray(item) && ['+', '-', ' '].includes(item[0]));
+};
+
 export const json = (data) => {
-  return JSON.stringify(makeObject(data, 1), null, 2);
+  return JSON.stringify(formatDiff(data), null, 2);
 };
 
 export default json;
